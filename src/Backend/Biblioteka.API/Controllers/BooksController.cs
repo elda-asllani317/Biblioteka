@@ -2,12 +2,14 @@ using Biblioteka.API.DTOs;
 using Biblioteka.Core.Entities;
 using Biblioteka.Core.Interfaces;
 using Biblioteka.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Biblioteka.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class BooksController : ControllerBase
 {
     private readonly IBookService _bookService;

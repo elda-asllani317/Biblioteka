@@ -1,12 +1,14 @@
 using Biblioteka.API.DTOs;
 using Biblioteka.Core.Interfaces;
 using Biblioteka.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Biblioteka.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class LoansController : ControllerBase
 {
     private readonly ILoanService _loanService;
