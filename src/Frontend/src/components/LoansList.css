@@ -1,0 +1,26 @@
+.overdue {
+  background-color: #ffe6e6 !important;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #3498db;
+  color: white;
+}
+
+.status-returned {
+  background-color: #27ae60;
+  color: white;
+}
+
+.status-overdue {
+  background-color: #e74c3c;
+  color: white;
+}
+
