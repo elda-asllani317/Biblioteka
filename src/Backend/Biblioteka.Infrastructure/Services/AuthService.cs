@@ -26,10 +26,21 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDTO?> LoginAsync(LoginDTO loginDTO)
     {
-        var user = await _unitOfWork.Users.FirstOrDefaultAsync(u => 
-            u.Email == loginDTO.Email && u.IsActive);
+        if (string.IsNullOrWhiteSpace(loginDTO.Email) || string.IsNullOrWhiteSpace(loginDTO.Password))
+        {
+            return null;
+        }
 
-        if (user == null || user.Password != loginDTO.Password) // Simple password check - in production use hashing
+        var user = await _unitOfWork.Users.FirstOrDefaultAsync(u => 
+            u.Email.ToLower().Trim() == loginDTO.Email.ToLower().Trim() && u.IsActive);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        // Simple password check - in production use hashing
+        if (user.Password?.Trim() != loginDTO.Password.Trim())
         {
             return null;
         }

@@ -16,8 +16,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AuthResponseDTO>> Login(LoginDTO loginDTO)
+    public async Task<ActionResult<AuthResponseDTO>> Login([FromBody] LoginDTO loginDTO)
     {
+        if (loginDTO == null || string.IsNullOrWhiteSpace(loginDTO.Email) || string.IsNullOrWhiteSpace(loginDTO.Password))
+        {
+            return BadRequest(new { message = "Email dhe password janë të detyrueshëm" });
+        }
+
         var result = await _authService.LoginAsync(loginDTO);
         if (result == null)
         {

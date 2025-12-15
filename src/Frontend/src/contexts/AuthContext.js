@@ -29,7 +29,21 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await authAPI.login({ email, password });
+      // Trim email and password to remove any whitespace
+      const trimmedEmail = email?.trim() || '';
+      const trimmedPassword = password?.trim() || '';
+      
+      if (!trimmedEmail || !trimmedPassword) {
+        return { 
+          success: false, 
+          message: 'Email dhe password janë të detyrueshëm' 
+        };
+      }
+
+      const response = await authAPI.login({ 
+        email: trimmedEmail.toLowerCase(), 
+        password: trimmedPassword 
+      });
       const { token: newToken, user: userData } = response.data;
       
       localStorage.setItem('token', newToken);
