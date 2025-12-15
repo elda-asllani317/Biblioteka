@@ -33,7 +33,7 @@ public class BookService : IBookService
 
     public async Task UpdateBookAsync(Book book)
     {
-        _unitOfWork.Books.UpdateAsync(book);
+        await _unitOfWork.Books.UpdateAsync(book);
         await _unitOfWork.SaveChangesAsync();
     }
 
