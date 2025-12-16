@@ -1,6 +1,17 @@
 -- Update existing users with passwords for testing
 -- Default password: password123
 
+USE BibliotekaDB;
+GO
+
+-- Sigurohu që kolona Password ekziston në tabelën Users
+IF COL_LENGTH('dbo.Users', 'Password') IS NULL
+BEGIN
+    ALTER TABLE [dbo].[Users]
+    ADD [Password] NVARCHAR(255) NULL;
+END
+GO
+
 UPDATE [dbo].[Users] 
 SET [Password] = 'password123' 
 WHERE [Email] = 'john.doe@example.com' OR [Email] = 'jane.smith@example.com';
