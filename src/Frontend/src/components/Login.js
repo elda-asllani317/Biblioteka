@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
 
@@ -64,7 +64,7 @@ function Login() {
         </form>
 
         <div className="login-footer">
-          <p>Nuk keni llogari? <a href="/register">Regjistrohuni këtu</a></p>
+          <p>Nuk keni llogari? <Link to="/register">Regjistrohuni këtu</Link></p>
         </div>
       </div>
     </div>

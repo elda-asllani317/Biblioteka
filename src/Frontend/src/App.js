@@ -8,6 +8,8 @@ import BooksList from './components/BooksList';
 import BookForm from './components/BookForm';
 import LoansList from './components/LoansList';
 import CreateLoan from './components/CreateLoan';
+import Register from './components/Register';
+import UsersList from './components/UsersList';
 
 function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -25,6 +27,7 @@ function Navbar() {
           <li><Link to="/books/new">Add Book</Link></li>
           <li><Link to="/loans">Loans</Link></li>
           <li><Link to="/loans/new">New Loan</Link></li>
+          <li><Link to="/users">Users</Link></li>
           <li className="user-info">
             <span>{user?.firstName} {user?.lastName}</span>
             <button onClick={logout} className="btn-logout">Dil</button>
@@ -42,6 +45,15 @@ function AppContent() {
       <main className="main-content">
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <UsersList />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/books"
             element={

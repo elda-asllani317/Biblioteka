@@ -32,8 +32,28 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<AuthResponseDTO>> Register(RegisterDTO registerDTO)
+    public async Task<ActionResult<AuthResponseDTO>> Register([FromBody] RegisterDTO registerDTO)
     {
+        if (registerDTO == null)
+        {
+            return BadRequest(new { message = "Të dhënat janë të detyrueshëm" });
+        }
+
+        if (string.IsNullOrWhiteSpace(registerDTO.Email) || string.IsNullOrWhiteSpace(registerDTO.Password))
+        {
+            return BadRequest(new { message = "Email dhe password janë të detyrueshëm" });
+        }
+
+        if (string.IsNullOrWhiteSpace(registerDTO.FirstName) || string.IsNullOrWhiteSpace(registerDTO.LastName))
+        {
+            return BadRequest(new { message = "Emri dhe mbiemri janë të detyrueshëm" });
+        }
+
+        if (registerDTO.Password.Length < 6)
+        {
+            return BadRequest(new { message = "Password-i duhet të jetë të paktën 6 karaktere" });
+        }
+
         var result = await _authService.RegisterAsync(registerDTO);
         if (result == null)
         {
