@@ -40,6 +40,20 @@ function LoansList() {
     }
   };
 
+  const handleDelete = async (loanId) => {
+    if (!window.confirm('Are you sure you want to delete this loan?')) {
+      return;
+    }
+
+    try {
+      await loansAPI.delete(loanId);
+      loadLoans();
+    } catch (error) {
+      console.error('Error deleting loan:', error);
+      alert('Error deleting loan');
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -97,6 +111,13 @@ function LoansList() {
                         Return
                       </button>
                     )}
+                    <button
+                      className="btn btn-danger"
+                      style={{ marginLeft: '0.5rem' }}
+                      onClick={() => handleDelete(loan.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))

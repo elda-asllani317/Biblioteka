@@ -26,8 +26,23 @@ public class BookService : IBookService
 
     public async Task<Book> CreateBookAsync(Book book)
     {
+        // Së pari krijojmë librin
         await _unitOfWork.Books.AddAsync(book);
         await _unitOfWork.SaveChangesAsync();
+
+        // Pastaj krijojmë automatikisht një kopje fizike të librit
+        var copy = new BookCopy
+        {
+            BookId = book.Id,
+            CopyNumber = $"COPY-{book.Id}-1",
+            IsAvailable = true,
+            Condition = "New",
+            PurchaseDate = DateTime.Now
+        };
+
+        await _unitOfWork.BookCopies.AddAsync(copy);
+        await _unitOfWork.SaveChangesAsync();
+
         return book;
     }
 

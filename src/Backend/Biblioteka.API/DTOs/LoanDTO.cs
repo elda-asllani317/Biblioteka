@@ -18,5 +18,13 @@ public class CreateLoanDTO
     public int UserId { get; set; }
     public int BookCopyId { get; set; }
     public int DaysToLoan { get; set; } = 14;
+    public DateTime? DueDate { get; set; }
+}
+
+public class UpdateLoanDTO
+{
+    public DateTime? DueDate { get; set; }
+    public DateTime? ReturnDate { get; set; }
+    public string? Status { get; set; }
 }
 

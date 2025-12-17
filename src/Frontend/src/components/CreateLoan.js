@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loansAPI, booksAPI } from '../services/api';
+import { loansAPI, usersAPI, bookCopiesAPI } from '../services/api';
 import './CreateLoan.css';
 
 function CreateLoan() {
@@ -8,7 +8,7 @@ function CreateLoan() {
   const [formData, setFormData] = useState({
     userId: '',
     bookCopyId: '',
-    daysToLoan: 14,
+    dueDate: '',
   });
 
   const [users, setUsers] = useState([]);
@@ -16,16 +16,21 @@ function CreateLoan() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // In a real app, you would fetch these from API
-    // For now, we'll use placeholder data
-    setUsers([
-      { id: 1, firstName: 'John', lastName: 'Doe' },
-      { id: 2, firstName: 'Jane', lastName: 'Smith' },
-    ]);
-    setBookCopies([
-      { id: 1, copyNumber: 'BC001', bookId: 1, isAvailable: true },
-      { id: 2, copyNumber: 'BC002', bookId: 1, isAvailable: true },
-    ]);
+    const loadData = async () => {
+      try {
+        const [usersRes, copiesRes] = await Promise.all([
+          usersAPI.getAll(),
+          bookCopiesAPI.getAvailable(),
+        ]);
+        setUsers(usersRes.data);
+        setBookCopies(copiesRes.data);
+      } catch (error) {
+        console.error('Error loading users/book copies:', error);
+        alert('Error loading users/book copies');
+      }
+    };
+
+    loadData();
   }, []);
 
   const handleChange = (e) => {
@@ -37,13 +42,26 @@ function CreateLoan() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.dueDate) {
+      alert('Due date is required');
+      return;
+    }
+
+    const selectedDate = new Date(formData.dueDate);
+    const today = new Date();
+    if (selectedDate < new Date(today.toDateString())) {
+      alert('Due date must be today or in the future');
+      return;
+    }
+
     setLoading(true);
 
     try {
       await loansAPI.create({
         userId: parseInt(formData.userId),
         bookCopyId: parseInt(formData.bookCopyId),
-        daysToLoan: parseInt(formData.daysToLoan),
+        dueDate: formData.dueDate,
       });
       navigate('/loans');
     } catch (error) {
@@ -101,14 +119,12 @@ function CreateLoan() {
           </div>
 
           <div className="form-group">
-            <label>Days to Loan *</label>
+            <label>Due Date *</label>
             <input
-              type="number"
-              name="daysToLoan"
-              value={formData.daysToLoan}
+              type="date"
+              name="dueDate"
+              value={formData.dueDate}
               onChange={handleChange}
-              min="1"
-              max="30"
               required
             />
           </div>

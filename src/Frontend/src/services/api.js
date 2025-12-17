@@ -57,6 +57,8 @@ export const loansAPI = {
   getAll: () => api.get('/loans'),
   getById: (id) => api.get(`/loans/${id}`),
   create: (data) => api.post('/loans', data),
+   update: (id, data) => api.put(`/loans/${id}`, data),
+   delete: (id) => api.delete(`/loans/${id}`),
   returnLoan: (id) => api.post(`/loans/${id}/return`),
   getUserLoans: (userId) => api.get(`/loans/user/${userId}`),
   getOverdue: () => api.get('/loans/overdue'),
@@ -68,6 +70,10 @@ export const usersAPI = {
   create: (data) => api.post('/users', data),
   update: (id, data) => api.put(`/users/${id}`, data),
   delete: (id) => api.delete(`/users/${id}`),
+};
+
+export const bookCopiesAPI = {
+  getAvailable: () => api.get('/bookcopies/available'),
 };
 
 export default api;
