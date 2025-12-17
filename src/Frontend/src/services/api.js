@@ -37,6 +37,22 @@ export const booksAPI = {
   search: (term) => api.get(`/books/search?term=${term}`),
 };
 
+export const authorsAPI = {
+  getAll: () => api.get('/authors'),
+  getById: (id) => api.get(`/authors/${id}`),
+  create: (data) => api.post('/authors', data),
+  update: (id, data) => api.put(`/authors/${id}`, data),
+  delete: (id) => api.delete(`/authors/${id}`),
+};
+
+export const categoriesAPI = {
+  getAll: () => api.get('/categories'),
+  getById: (id) => api.get(`/categories/${id}`),
+  create: (data) => api.post('/categories', data),
+  update: (id, data) => api.put(`/categories/${id}`, data),
+  delete: (id) => api.delete(`/categories/${id}`),
+};
+
 export const loansAPI = {
   getAll: () => api.get('/loans'),
   getById: (id) => api.get(`/loans/${id}`),

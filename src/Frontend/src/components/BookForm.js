@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { booksAPI } from '../services/api';
+import { booksAPI, authorsAPI, categoriesAPI } from '../services/api';
 import './BookForm.css';
 
 function BookForm() {
@@ -23,17 +23,23 @@ function BookForm() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // In a real app, you would fetch these from API
-    // For now, we'll use placeholder data
-    setAuthors([
-      { id: 1, firstName: 'Ismail', lastName: 'Kadare' },
-      { id: 2, firstName: 'Dritëro', lastName: 'Agolli' },
-    ]);
-    setCategories([
-      { id: 1, name: 'Fiction' },
-      { id: 2, name: 'Non-Fiction' },
-      { id: 3, name: 'Science' },
-    ]);
+    const loadLookups = async () => {
+      try {
+        const [authorsRes, categoriesRes] = await Promise.all([
+          authorsAPI.getAll(),
+          categoriesAPI.getAll(),
+        ]);
+        setAuthors(authorsRes.data);
+        setCategories(categoriesRes.data);
+      } catch (error) {
+        console.error('Error loading authors/categories:', error);
+        alert('Error loading authors/categories');
+      }
+    };
+
+    loadLookups();
+
+    // Publishers mbeten placeholder derisa të kesh endpoint edhe për ta
     setPublishers([
       { id: 1, name: 'Onufri' },
       { id: 2, name: 'Toena' },

@@ -10,6 +10,8 @@ import LoansList from './components/LoansList';
 import CreateLoan from './components/CreateLoan';
 import Register from './components/Register';
 import UsersList from './components/UsersList';
+import AuthorsList from './components/AuthorsList';
+import CategoriesList from './components/CategoriesList';
 
 function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -25,6 +27,8 @@ function Navbar() {
         <ul className="nav-menu">
           <li><Link to="/books">Books</Link></li>
           <li><Link to="/books/new">Add Book</Link></li>
+          <li><Link to="/authors">Authors</Link></li>
+          <li><Link to="/categories">Categories</Link></li>
           <li><Link to="/loans">Loans</Link></li>
           <li><Link to="/loans/new">New Loan</Link></li>
           <li><Link to="/users">Users</Link></li>
@@ -67,6 +71,22 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <BookForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/authors"
+            element={
+              <ProtectedRoute>
+                <AuthorsList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/categories"
+            element={
+              <ProtectedRoute>
+                <CategoriesList />
               </ProtectedRoute>
             }
           />
