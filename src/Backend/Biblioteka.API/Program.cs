@@ -31,6 +31,7 @@ builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "BibliotekaSecretKey12345678901234567890";

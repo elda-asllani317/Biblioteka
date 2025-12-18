@@ -12,6 +12,7 @@ import Register from './components/Register';
 import UsersList from './components/UsersList';
 import AuthorsList from './components/AuthorsList';
 import CategoriesList from './components/CategoriesList';
+import BookCopiesList from './components/BookCopiesList';
 
 function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -27,6 +28,7 @@ function Navbar() {
         <ul className="nav-menu">
           <li><Link to="/books">Books</Link></li>
           <li><Link to="/books/new">Add Book</Link></li>
+          <li><Link to="/bookcopies">Book Copies</Link></li>
           <li><Link to="/authors">Authors</Link></li>
           <li><Link to="/categories">Categories</Link></li>
           <li><Link to="/loans">Loans</Link></li>
@@ -71,6 +73,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <BookForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bookcopies"
+            element={
+              <ProtectedRoute>
+                <BookCopiesList />
               </ProtectedRoute>
             }
           />

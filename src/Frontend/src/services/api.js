@@ -73,7 +73,13 @@ export const usersAPI = {
 };
 
 export const bookCopiesAPI = {
+  getAll: () => api.get('/bookcopies'),
+  getById: (id) => api.get(`/bookcopies/${id}`),
+  getByBookId: (bookId) => api.get(`/bookcopies/book/${bookId}`),
   getAvailable: () => api.get('/bookcopies/available'),
+  create: (data) => api.post('/bookcopies', data),
+  update: (id, data) => api.put(`/bookcopies/${id}`, data),
+  delete: (id) => api.delete(`/bookcopies/${id}`),
 };
 
 export default api;
