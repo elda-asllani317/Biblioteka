@@ -56,6 +56,9 @@ public class BibliotekaDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
+            entity.HasIndex(e => e.Name).IsUnique();
+            entity.HasIndex(e => e.Email).IsUnique();
         });
 
         // Book configuration

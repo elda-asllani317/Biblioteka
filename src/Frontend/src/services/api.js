@@ -53,6 +53,14 @@ export const categoriesAPI = {
   delete: (id) => api.delete(`/categories/${id}`),
 };
 
+export const publishersAPI = {
+  getAll: (params) => api.get('/publishers', { params }),
+  getById: (id) => api.get(`/publishers/${id}`),
+  create: (data) => api.post('/publishers', data),
+  update: (id, data) => api.put(`/publishers/${id}`, data),
+  delete: (id) => api.delete(`/publishers/${id}`),
+};
+
 export const loansAPI = {
   getAll: () => api.get('/loans'),
   getById: (id) => api.get(`/loans/${id}`),

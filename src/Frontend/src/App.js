@@ -12,6 +12,7 @@ import Register from './components/Register';
 import UsersList from './components/UsersList';
 import AuthorsList from './components/AuthorsList';
 import CategoriesList from './components/CategoriesList';
+import PublishersList from './components/PublishersList';
 import BookCopiesList from './components/BookCopiesList';
 import FinesList from './components/FinesList';
 
@@ -32,6 +33,7 @@ function Navbar() {
           <li><Link to="/bookcopies">Book Copies</Link></li>
           <li><Link to="/authors">Authors</Link></li>
           <li><Link to="/categories">Categories</Link></li>
+          <li><Link to="/publishers">Publishers</Link></li>
           <li><Link to="/loans">Loans</Link></li>
           <li><Link to="/loans/new">New Loan</Link></li>
           <li><Link to="/fines">Fines</Link></li>
@@ -99,6 +101,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <CategoriesList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/publishers"
+            element={
+              <ProtectedRoute>
+                <PublishersList />
               </ProtectedRoute>
             }
           />
