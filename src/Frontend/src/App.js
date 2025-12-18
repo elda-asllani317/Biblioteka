@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import Login from './components/Login';
 import './App.css';
 import BooksList from './components/BooksList';
@@ -17,9 +18,10 @@ import BookCopiesList from './components/BookCopiesList';
 import FinesList from './components/FinesList';
 import NotificationsList from './components/NotificationsList';
 import ReviewsList from './components/ReviewsList';
+import Dashboard from './components/Dashboard';
 
 function Navbar() {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin } = useAuth();
 
   if (!isAuthenticated) {
     return null;
@@ -30,20 +32,21 @@ function Navbar() {
       <div className="nav-container">
         <h1 className="nav-logo">📚 Biblioteka</h1>
         <ul className="nav-menu">
+          <li><Link to="/dashboard">Dashboard</Link></li>
           <li><Link to="/books">Books</Link></li>
-          <li><Link to="/books/new">Add Book</Link></li>
-          <li><Link to="/bookcopies">Book Copies</Link></li>
-          <li><Link to="/authors">Authors</Link></li>
-          <li><Link to="/categories">Categories</Link></li>
-          <li><Link to="/publishers">Publishers</Link></li>
+          {isAdmin && <li><Link to="/books/new">Add Book</Link></li>}
+          {isAdmin && <li><Link to="/bookcopies">Book Copies</Link></li>}
+          {isAdmin && <li><Link to="/authors">Authors</Link></li>}
+          {isAdmin && <li><Link to="/categories">Categories</Link></li>}
+          {isAdmin && <li><Link to="/publishers">Publishers</Link></li>}
           <li><Link to="/loans">Loans</Link></li>
-          <li><Link to="/loans/new">New Loan</Link></li>
-          <li><Link to="/fines">Fines</Link></li>
+          {isAdmin && <li><Link to="/loans/new">New Loan</Link></li>}
+          {isAdmin && <li><Link to="/fines">Fines</Link></li>}
           <li><Link to="/notifications">Notifications</Link></li>
           <li><Link to="/reviews">Reviews</Link></li>
-          <li><Link to="/users">Users</Link></li>
+          {isAdmin && <li><Link to="/users">Users</Link></li>}
           <li className="user-info">
-            <span>{user?.firstName} {user?.lastName}</span>
+            <span>{user?.firstName} {user?.lastName} {isAdmin && <span style={{color: '#e74c3c'}}>(Admin)</span>}</span>
             <button onClick={logout} className="btn-logout">Dil</button>
           </li>
         </ul>
@@ -61,11 +64,19 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/users"
+            path="/dashboard"
             element={
               <ProtectedRoute>
-                <UsersList />
+                <Dashboard />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <AdminRoute>
+                <UsersList />
+              </AdminRoute>
             }
           />
           <Route
@@ -79,41 +90,41 @@ function AppContent() {
           <Route
             path="/books/new"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <BookForm />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/bookcopies"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <BookCopiesList />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/authors"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <AuthorsList />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/categories"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <CategoriesList />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/publishers"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <PublishersList />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
@@ -127,17 +138,17 @@ function AppContent() {
           <Route
             path="/loans/new"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <CreateLoan />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/fines"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <FinesList />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
@@ -156,7 +167,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<Navigate to="/books" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>
     </div>

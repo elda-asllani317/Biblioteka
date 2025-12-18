@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Register.css';
@@ -15,8 +15,15 @@ function Register() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -51,7 +58,8 @@ function Register() {
     });
 
     if (result.success) {
-      navigate('/books');
+      // Redirect to dashboard after successful registration
+      navigate('/dashboard');
     } else {
       setError(result.message);
     }
@@ -64,6 +72,19 @@ function Register() {
       <div className="register-card">
         <h1>📚 Biblioteka</h1>
         <h2>Regjistrohu</h2>
+        <div style={{ 
+          fontSize: '0.85rem', 
+          color: '#666', 
+          marginBottom: '1rem', 
+          textAlign: 'center',
+          padding: '0.75rem',
+          backgroundColor: '#e8f4f8',
+          borderRadius: '6px',
+          border: '1px solid #bee5eb'
+        }}>
+          <strong>ℹ️ Informacion:</strong><br />
+          Regjistrimi krijon një llogari <strong>Përdorues</strong>. Vetëm administratori mund të menaxhojë sistemin plotësisht.
+        </div>
 
         {error && <div className="error-message">{error}</div>}
 

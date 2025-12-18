@@ -32,6 +32,7 @@ public class BibliotekaDbContext : DbContext
             entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
             entity.Property(e => e.Password).IsRequired();
+            entity.Property(e => e.Role).IsRequired().HasMaxLength(50).HasDefaultValue("User");
             entity.HasIndex(e => e.Email).IsUnique();
         });
 

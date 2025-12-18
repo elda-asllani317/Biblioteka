@@ -11,6 +11,7 @@ public class User
     public string Address { get; set; } = string.Empty;
     public DateTime RegistrationDate { get; set; }
     public bool IsActive { get; set; } = true;
+    public string Role { get; set; } = "User"; // Admin or User
     
     // Navigation properties
     public virtual ICollection<Loan> Loans { get; set; } = new List<Loan>();

@@ -81,6 +81,7 @@ function UsersList() {
               <th>Telefoni</th>
               <th>Adresa</th>
               <th>Data Regjistrimit</th>
+              <th>Role</th>
               <th>Aktiv</th>
               <th>Veprime</th>
             </tr>
@@ -100,6 +101,19 @@ function UsersList() {
                   <td>{user.phone}</td>
                   <td>{user.address}</td>
                   <td>{new Date(user.registrationDate).toLocaleDateString()}</td>
+                  <td>
+                    <span style={{
+                      display: 'inline-block',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: '12px',
+                      backgroundColor: user.role === 'Admin' ? '#e74c3c' : '#3498db',
+                      color: 'white',
+                      fontSize: '0.85rem',
+                      fontWeight: '500',
+                    }}>
+                      {user.role === 'Admin' ? '👑 Admin' : '👤 User'}
+                    </span>
+                  </td>
                   <td>{user.isActive ? '✅' : '❌'}</td>
                   <td>
                     <button
@@ -133,7 +147,9 @@ function UserForm({ user, onClose }) {
     email: user?.email || '',
     password: '',
     phone: user?.phone || '',
-    address: user?.address || ''
+    address: user?.address || '',
+    role: user?.role || 'User',
+    isActive: user?.isActive !== undefined ? user.isActive : true
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -158,11 +174,21 @@ function UserForm({ user, onClose }) {
           lastName: formData.lastName,
           phone: formData.phone,
           address: formData.address,
-          password: formData.password || undefined
+          password: formData.password || undefined,
+          role: formData.role,
+          isActive: formData.isActive
         });
       } else {
         // Create new user
-        await usersAPI.create(formData);
+        await usersAPI.create({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+          address: formData.address,
+          role: formData.role
+        });
       }
       onClose();
     } catch (error) {
@@ -250,6 +276,36 @@ function UserForm({ user, onClose }) {
               value={formData.address}
               onChange={handleChange}
             />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Role *</label>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+                style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
+              >
+                <option value="User">👤 User</option>
+                <option value="Admin">👑 Admin</option>
+              </select>
+            </div>
+
+            {user && (
+              <div className="form-group">
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <input
+                    type="checkbox"
+                    name="isActive"
+                    checked={formData.isActive}
+                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                  />
+                  Përdorues Aktiv
+                </label>
+              </div>
+            )}
           </div>
 
           <div className="form-actions">

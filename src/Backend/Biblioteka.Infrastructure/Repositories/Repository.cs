@@ -23,7 +23,9 @@ public class Repository<T> : IRepository<T> where T : class
 
     public virtual async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await _dbSet.ToListAsync();
+        // Use AsNoTracking() and refresh context to avoid cache issues and get fresh data from database
+        _context.ChangeTracker.Clear(); // Clear all tracked entities
+        return await _dbSet.AsNoTracking().ToListAsync();
     }
 
     public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
@@ -33,7 +35,9 @@ public class Repository<T> : IRepository<T> where T : class
 
     public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
     {
-        return await _dbSet.FirstOrDefaultAsync(predicate);
+        // Use AsNoTracking() and refresh context to avoid cache issues and get fresh data from database
+        _context.ChangeTracker.Clear(); // Clear all tracked entities
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
     }
 
     public virtual async Task<T> AddAsync(T entity)

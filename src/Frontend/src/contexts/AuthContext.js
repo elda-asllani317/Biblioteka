@@ -21,8 +21,14 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem('user');
     
     if (storedToken && storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      // Normalize role property
+      const normalizedUser = {
+        ...parsedUser,
+        role: parsedUser?.role || parsedUser?.Role || 'User'
+      };
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser(normalizedUser);
     }
     setLoading(false);
   }, []);
@@ -46,11 +52,17 @@ export const AuthProvider = ({ children }) => {
       });
       const { token: newToken, user: userData } = response.data;
       
+      // Normalize role property (handle both 'role' and 'Role' for backward compatibility)
+      const normalizedUserData = {
+        ...userData,
+        role: userData?.role || userData?.Role || 'User'
+      };
+      
       localStorage.setItem('token', newToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(normalizedUserData));
       
       setToken(newToken);
-      setUser(userData);
+      setUser(normalizedUserData);
       
       return { success: true };
     } catch (error) {
@@ -88,6 +100,9 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Check role (case-insensitive for safety)
+  const isAdmin = user?.role?.toLowerCase() === 'admin';
+
   const value = {
     user,
     token,
@@ -95,6 +110,7 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     isAuthenticated: !!token,
+    isAdmin,
     loading
   };
 

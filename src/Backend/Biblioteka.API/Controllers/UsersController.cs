@@ -7,7 +7,7 @@ namespace Biblioteka.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Policy = "AdminOnly")]
 public class UsersController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -31,7 +31,8 @@ public class UsersController : ControllerBase
             u.Phone,
             u.Address,
             u.RegistrationDate,
-            u.IsActive
+            u.IsActive,
+            u.Role
         });
         return Ok(usersWithoutPasswords);
     }
@@ -52,17 +53,24 @@ public class UsersController : ControllerBase
             user.Phone,
             user.Address,
             user.RegistrationDate,
-            user.IsActive
+            user.IsActive,
+            user.Role
         });
     }
 
     [HttpPost]
-    [AllowAnonymous]
     public async Task<ActionResult<User>> CreateUser([FromBody] CreateUserDTO dto)
     {
         var existingUser = await _unitOfWork.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
         if (existingUser != null)
             return BadRequest(new { message = "Përdoruesi me këtë email ekziston tashmë" });
+
+        // Validate role - only Admin or User allowed
+        var role = string.IsNullOrWhiteSpace(dto.Role) ? "User" : dto.Role;
+        if (role != "Admin" && role != "User")
+        {
+            return BadRequest(new { message = "Role duhet të jetë 'Admin' ose 'User'" });
+        }
 
         var user = new User
         {
@@ -73,7 +81,8 @@ public class UsersController : ControllerBase
             Phone = dto.Phone,
             Address = dto.Address,
             RegistrationDate = DateTime.Now,
-            IsActive = true
+            IsActive = true,
+            Role = role
         };
 
         await _unitOfWork.Users.AddAsync(user);
@@ -88,7 +97,8 @@ public class UsersController : ControllerBase
             user.Phone,
             user.Address,
             user.RegistrationDate,
-            user.IsActive
+            user.IsActive,
+            user.Role
         });
     }
 
@@ -105,6 +115,22 @@ public class UsersController : ControllerBase
         user.Address = dto.Address;
         if (!string.IsNullOrEmpty(dto.Password))
             user.Password = dto.Password;
+        
+        // Allow admin to update role
+        if (!string.IsNullOrWhiteSpace(dto.Role))
+        {
+            if (dto.Role != "Admin" && dto.Role != "User")
+            {
+                return BadRequest(new { message = "Role duhet të jetë 'Admin' ose 'User'" });
+            }
+            user.Role = dto.Role;
+        }
+
+        // Allow admin to activate/deactivate users
+        if (dto.IsActive.HasValue)
+        {
+            user.IsActive = dto.IsActive.Value;
+        }
 
         await _unitOfWork.Users.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
@@ -134,6 +160,7 @@ public class CreateUserDTO
     public string Password { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
+    public string Role { get; set; } = "User"; // Default to User, admin can set to Admin
 }
 
 public class UpdateUserDTO
@@ -143,5 +170,7 @@ public class UpdateUserDTO
     public string Phone { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string? Password { get; set; }
+    public string? Role { get; set; } // Admin can update role
+    public bool? IsActive { get; set; } // Admin can activate/deactivate users
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
@@ -8,8 +8,15 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +26,8 @@ function Login() {
     const result = await login(email, password);
     
     if (result.success) {
-      navigate('/books');
+      // Redirect to dashboard after successful login
+      navigate('/dashboard');
     } else {
       setError(result.message);
     }
@@ -32,18 +40,31 @@ function Login() {
       <div className="login-card">
         <h1>📚 Biblioteka</h1>
         <h2>Hyr në Sistem</h2>
+        <div style={{ 
+          fontSize: '0.85rem', 
+          color: '#666', 
+          marginBottom: '1rem', 
+          textAlign: 'center',
+          padding: '0.75rem',
+          backgroundColor: '#f8f9fa',
+          borderRadius: '6px'
+        }}>
+          <strong>Test Credentials:</strong><br />
+          Admin: admin / admin<br />
+          User: john.doe@example.com / password123
+        </div>
         
         {error && <div className="error-message">{error}</div>}
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Email</label>
+            <label>Email ose Username</label>
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="shkruani email-in tuaj"
+              placeholder="shkruani email-in ose username"
             />
           </div>
 

@@ -9,7 +9,7 @@ namespace Biblioteka.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Policy = "AdminOnly")]
 public class FinesController : ControllerBase
 {
     private readonly IFineService _fineService;
