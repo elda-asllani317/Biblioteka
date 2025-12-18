@@ -13,6 +13,7 @@ import UsersList from './components/UsersList';
 import AuthorsList from './components/AuthorsList';
 import CategoriesList from './components/CategoriesList';
 import BookCopiesList from './components/BookCopiesList';
+import FinesList from './components/FinesList';
 
 function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -33,6 +34,7 @@ function Navbar() {
           <li><Link to="/categories">Categories</Link></li>
           <li><Link to="/loans">Loans</Link></li>
           <li><Link to="/loans/new">New Loan</Link></li>
+          <li><Link to="/fines">Fines</Link></li>
           <li><Link to="/users">Users</Link></li>
           <li className="user-info">
             <span>{user?.firstName} {user?.lastName}</span>
@@ -113,6 +115,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <CreateLoan />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/fines"
+            element={
+              <ProtectedRoute>
+                <FinesList />
               </ProtectedRoute>
             }
           />

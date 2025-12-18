@@ -82,4 +82,14 @@ export const bookCopiesAPI = {
   delete: (id) => api.delete(`/bookcopies/${id}`),
 };
 
+export const finesAPI = {
+  getAll: () => api.get('/fines'),
+  getById: (id) => api.get(`/fines/${id}`),
+  getByUserId: (userId) => api.get(`/fines/user/${userId}`),
+  getByStatus: (status) => api.get(`/fines/status/${status}`),
+  create: (data) => api.post('/fines', data),
+  update: (id, data) => api.put(`/fines/${id}`, data),
+  delete: (id) => api.delete(`/fines/${id}`),
+};
+
 export default api;
