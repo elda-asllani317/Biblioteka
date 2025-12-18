@@ -100,4 +100,24 @@ export const finesAPI = {
   delete: (id) => api.delete(`/fines/${id}`),
 };
 
+export const notificationsAPI = {
+  getByUser: (userId, unreadOnly = false) => api.get(`/notifications/user/${userId}`, { params: { unreadOnly } }),
+  getById: (id) => api.get(`/notifications/${id}`),
+  create: (data) => api.post('/notifications', data),
+  update: (id, data) => api.put(`/notifications/${id}`, data),
+  markAsRead: (id) => api.put(`/notifications/${id}/mark-read`),
+  delete: (id) => api.delete(`/notifications/${id}`),
+};
+
+export const reviewsAPI = {
+  getByBook: (bookId) => api.get(`/reviews/book/${bookId}`),
+  getAverageRating: (bookId) => api.get(`/reviews/book/${bookId}/average`),
+  getByUser: (userId) => api.get(`/reviews/user/${userId}`),
+  getById: (id) => api.get(`/reviews/${id}`),
+  create: (data) => api.post('/reviews', data),
+  update: (id, data) => api.put(`/reviews/${id}`, data),
+  delete: (id) => api.delete(`/reviews/${id}`),
+  checkUserHasReviewed: (userId, bookId) => api.get(`/reviews/check/${userId}/${bookId}`),
+};
+
 export default api;
