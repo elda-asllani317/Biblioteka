@@ -85,7 +85,7 @@ dotnet run
 
 API do të jetë e disponueshme në `https://localhost:7000`
 
-### Frontend
+Frontend
 
 1. Instaloni dependencies:
 ```bash
@@ -100,9 +100,9 @@ npm start
 
 Aplikacioni do të hapet në `http://localhost:3000`
 
-## API Endpoints
+API Endpoints
 
-### Books
+Books
 - `GET /api/books` - Merr të gjithë librat
 - `GET /api/books/{id}` - Merr librin me ID
 - `POST /api/books` - Krijon libër të ri
@@ -110,24 +110,25 @@ Aplikacioni do të hapet në `http://localhost:3000`
 - `DELETE /api/books/{id}` - Fshin librin
 - `GET /api/books/search?term={term}` - Kërkon libra
 
-### Loans
+Loans
 - `GET /api/loans/{id}` - Merr huazimin me ID
 - `POST /api/loans` - Krijon huazim të ri
 - `POST /api/loans/{id}/return` - Kthen librin
 - `GET /api/loans/user/{userId}` - Merr huazimet e përdoruesit
 - `GET /api/loans/overdue` - Merr huazimet e vonuara
 
-## Karakteristikat
+ Karakteristikat
 
-- ✅ OO Programming
-- ✅ Layered Architecture
-- ✅ Repository Pattern
-- ✅ Unit of Work Pattern
-- ✅ Entity Framework Core
-- ✅ RESTful API
-- ✅ React.js Frontend
-- ✅ Responsive Design
+- OO Programming
+- Layered Architecture
+-  Repository Pattern
+-  Unit of Work Pattern
+-  Entity Framework Core
+-  RESTful API
+ - React.js Frontend
+- Responsive Design
 
-## Autor
+ Autor:
+ Elda Asllani
+ Merise  Shallci
 
-Projekt i krijuar për kërkesat e Project Requirement 4.
